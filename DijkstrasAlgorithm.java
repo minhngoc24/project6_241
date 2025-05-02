@@ -1,4 +1,5 @@
 import java.io.InputStream;
+import java.sql.SQLOutput;
 import java.util.*;
 
 
@@ -20,27 +21,31 @@ public class DijkstrasAlgorithm {
         // Your Dijkstra's algorithm code here.
         String[] vertices = g.getVertices().toArray(new String[0]);
 
-        for (String vertex : vertices) {
-            dist.put(vertex, 999999);
-            prev.put(vertex, null);
+        for (int i = 0; i < vertices.length; i++) {
+            String vertex = vertices[i];
+            dist.put(vertex, 999999); // dist[v] = infinity
+            prev.put(vertex, null); // prev[v] = undefined
         }
 
-        dist.put(start, 0);
-        pq.add(start, 0);
+        dist.put(start, 0); // dist[start] = 0
+        pq.add(start, 0); // PQ.insert(start, 0)
         while (!pq.isEmpty()) {
             String u = pq.remove();
             System.out.println("Visting vertex " + u);
             if (u.equals(finish)){
                 break;
             }
+
             Edge[] neighbors = g.getEdgesFrom(u).toArray(new Edge[0]);
-            for (Edge e : neighbors) {
+
+            for (int i = 0; i < neighbors.length; i ++) {
+                Edge e = neighbors[i];
                 int alt = dist.get(u) + e.getWeight();
                 String v = e.getVertex2();
                 if (alt < dist.get(v)) {
-                    System.out.println("    Updating dist[" + v + "] from " + dist.get(v) + " to " + alt);
-                    dist.put(v, alt);
-                    prev.put(v, u);
+                    System.out.println(" Updating dist[" + v + "] from " + dist.get(v) + " to " + alt);
+                    dist.put(v, alt); // dist[v] = alt
+                    prev.put(v, u); // prev[v] = u
                     if (pq.contains(v)){
                         pq.remove(v);
                     }
@@ -110,6 +115,12 @@ public class DijkstrasAlgorithm {
                 }
             }
             else if(words[0].equals("dijkstra")){
+                for (String from : g.getVertices()) {
+                    for (Edge e : g.getEdgesFrom(from)) {
+                        System.out.println(from + " -> " + e.getVertex2() + ": " + e.getWeight());
+                    }
+                }
+
                 dijkstra(g, words[1], words[2]);
             }
 
